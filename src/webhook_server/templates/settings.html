@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard_page') }}">🔐 VPN Bot Panel</a>
+            <div>
+                <a href="{{ url_for('dashboard_page') }}" class="btn btn-outline-light btn-sm">📊 Дашборд</a>
+                <a href="{{ url_for('settings_page') }}" class="btn btn-outline-light btn-sm">⚙️ Настройки</a>
+                <a href="{{ url_for('users_page') }}" class="btn btn-outline-light btn-sm">👥 Пользователи</a>
+                <a href="{{ url_for('hosts_page') }}" class="btn btn-outline-light btn-sm">🖥 Хосты</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-light btn-sm">🚪 Выход</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <h2 class="mb-4">⚙️ Настройки</h2>
+        
+        <form method="POST">
+            <div class="card mb-4">
+                <div class="card-header">🔐 Панель управления</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Логин</label>
+                            <input type="text" name="panel_login" class="form-control" value="{{ settings.panel_login or 'admin' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Пароль</label>
+                            <input type="password" name="panel_password" class="form-control" value="{{ settings.panel_password or 'admin' }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">⭐ Telegram Stars</div>
+                <div class="card-body">
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" name="stars_enabled" {% if settings.stars_enabled == 'true' %}checked{% endif %}>
+                        <label class="form-check-label">Включить оплату звёздами</label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Цена 1 звезды (RUB)</label>
+                        <input type="number" step="0.01" name="stars_price_rub" class="form-control" value="{{ settings.stars_price_rub or '1.0' }}">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">🤝 Реферальная программа</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Процент реферала (%)</label>
+                            <input type="number" name="referral_percentage" class="form-control" value="{{ settings.referral_percentage or '10' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Скидка приглашенному (%)</label>
+                            <input type="number" name="referral_discount" class="form-control" value="{{ settings.referral_discount or '5' }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">💳 Платежные системы</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">YooKassa Shop ID</label>
+                            <input type="text" name="yookassa_shop_id" class="form-control" value="{{ settings.yookassa_shop_id or '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">YooKassa Secret Key</label>
+                            <input type="password" name="yookassa_secret_key" class="form-control" value="{{ settings.yookassa_secret_key or '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">CryptoBot Token</label>
+                            <input type="password" name="cryptobot_token" class="form-control" value="{{ settings.cryptobot_token or '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">TON Wallet Address</label>
+                            <input type="text" name="ton_wallet_address" class="form-control" value="{{ settings.ton_wallet_address or '' }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">🤖 Telegram Bot</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Bot Token</label>
+                            <input type="password" name="telegram_bot_token" class="form-control" value="{{ settings.telegram_bot_token or '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Bot Username</label>
+                            <input type="text" name="telegram_bot_username" class="form-control" value="{{ settings.telegram_bot_username or '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Admin Telegram ID</label>
+                            <input type="text" name="admin_telegram_id" class="form-control" value="{{ settings.admin_telegram_id or '' }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">💾 Сохранить все настройки</button>
+        </form>
+    </div>
+</body>
+</html>

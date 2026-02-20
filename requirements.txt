@@ -1,0 +1,9 @@
+aiogram>=3.0.0
+flask>=2.3.0
+sqlite3
+requests
+py3xui
+aiosend
+pytonconnect
+qrcode
+Pillow

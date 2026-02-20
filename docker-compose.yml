@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    container_name: my-vpn-bot
+    restart: unless-stopped
+    volumes:
+      - bot_data:/app/project
+    ports:
+      - "8999:8999"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+volumes:
+  bot_data:
